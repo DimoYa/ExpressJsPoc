@@ -1,0 +1,11 @@
+{{#with data}}
+<h1>{{name}}</h1>
+<img class="cube" src="/static/images/{{imageUrl}}">
+<div class="details">
+  <p><span>Description:</span> {{description}}</p>
+  <a class="btn" href="/">Back</a>
+  <a class="btn warning" href="/edit/{{id}}">Edit</a>
+  <a class="btn danger" href="/delete/{{id}}">Delete</a>
+</div>
+</main>
+{{/with}}
