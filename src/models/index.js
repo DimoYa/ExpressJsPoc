@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 require('./car');
+require('./accessory');
 
 const connectionString = "mongodb://localhost:27017/carbicle";
 
