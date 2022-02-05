@@ -1,19 +1,22 @@
-const { Schema, model } = require("mongoose");
-const { hashedPassword, comparePassword } = require("../services/util");
+const { Schema, model } = require('mongoose');
+const { hashedPassword, comparePassword } = require('../services/util');
 
 const userSchema = new Schema({
   username: { type: String, required: true, minlength: 3, unique: true },
   hashedPassword: { type: String, required: true },
 });
 
-userSchema.methods.comparePassword = async function(passWord) {
+userSchema.methods.comparePassword = async function (passWord) {
   return await comparePassword(passWord, this.hashedPassword);
 };
 
-userSchema.pre('save', function() {
-  console.log('Saving', this);
+userSchema.pre('save', async function (next) {
+  if (this.isModified('hashedPassword')) {
+    this.hashedPassword = await hashedPassword(this.hashedPassword);
+  }
+  next();
 });
 
-const User = model("User", userSchema);
+const User = model('User', userSchema);
 
 module.exports = User;

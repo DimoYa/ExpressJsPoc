@@ -1,5 +1,6 @@
 const express = require('express');
 const hbs = require('express-handlebars');
+const session = require('express-session');
 
 const initDB = require('./models/index');
 
@@ -16,7 +17,13 @@ const _delete = require('./controllers/delete');
 const edit = require('./controllers/edit');
 const accessory = require('./controllers/accessory');
 const attach = require('./controllers/attach');
-const { registerGet, loginGet, loginPost, registerPost } = require('./controllers/auth');
+const {
+  registerGet,
+  loginGet,
+  loginPost,
+  registerPost,
+} = require('./controllers/auth');
+const req = require('express/lib/request');
 
 start();
 
@@ -25,6 +32,14 @@ async function start() {
 
   const app = express();
 
+  app.use(
+    session({
+      secret: 'secret',
+      resave: false,
+      saveUninitialized: true,
+      cookie: { secure: 'auto' },
+    })
+  );
   app.use(express.urlencoded({ extended: true }));
   app.use('/static', express.static('static'));
   app.use(carService());
