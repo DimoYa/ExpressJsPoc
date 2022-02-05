@@ -10,10 +10,13 @@ const { details } = require('./controllers/details');
 const { notFound } = require('./controllers/notFound');
 const carService = require('./services/car');
 const accessoryService = require('./services/accessory');
+const authService = require('./services/auth');
+
 const _delete = require('./controllers/delete');
 const edit = require('./controllers/edit');
 const accessory = require('./controllers/accessory');
 const attach = require('./controllers/attach');
+const { registerGet, loginGet, loginPost, registerPost } = require('./controllers/auth');
 
 start();
 
@@ -26,6 +29,7 @@ async function start() {
   app.use('/static', express.static('static'));
   app.use(carService());
   app.use(accessoryService());
+  app.use(authService());
 
   app.engine(
     'hbs',
@@ -48,6 +52,10 @@ async function start() {
   app.route('/accessory').get(accessory.get).post(accessory.post);
 
   app.route('/attach/:id').get(attach.get).post(attach.post);
+
+  app.route('/register').get(registerGet).post(registerPost);
+
+  app.route('/login').get(loginGet).post(loginPost);
 
   app.all('*', notFound);
 
