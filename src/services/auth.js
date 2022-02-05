@@ -11,17 +11,17 @@ async function register(username, password) {
 async function login(username, password) {
   const user = await User.findOne({ username });
 
-  if (!user) {
-    throw new Error("Incorrect user or pass");
+  if (user && (await user.comparePassword(password))) {
+    return true;
   } else {
-    return user.comparePassword(password);
+    throw new Error('incorrect user or pass!');
   }
 }
 
 module.exports = () => (req, res, next) => {
   req.auth = {
     register,
-    login
+    login,
   };
   next();
 };
