@@ -5,11 +5,11 @@ async function register(session, username, password) {
     username,
     hashedPassword: password,
   });
-  await user.save();
   session.user = {
     id: user._id,
     username: user.username
   };
+  await user.save();
 }
 
 async function login(session, username, password) {
