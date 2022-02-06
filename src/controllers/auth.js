@@ -1,3 +1,5 @@
+const { redirect } = require("express/lib/response");
+
 module.exports = {
     registerGet(req, res) {
         res.render('register', { title: `Register` });
@@ -29,5 +31,9 @@ module.exports = {
             console.error(err.message);
             res.redirect('/login');
         }
+    },
+    logout(req, res) {
+        req.auth.logout();
+        res.redirect('/');
     }
 }

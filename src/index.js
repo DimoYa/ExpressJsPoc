@@ -22,6 +22,7 @@ const {
   loginGet,
   loginPost,
   registerPost,
+  logout,
 } = require('./controllers/auth');
 const req = require('express/lib/request');
 
@@ -71,6 +72,8 @@ async function start() {
   app.route('/register').get(registerGet).post(registerPost);
 
   app.route('/login').get(loginGet).post(loginPost);
+
+  app.get('/logout', logout);
 
   app.all('*', notFound);
 
