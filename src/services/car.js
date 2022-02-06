@@ -1,8 +1,8 @@
 const Car = require("../models/car");
-const { carViewModel } = require('./util');
+const { carViewModel } = require("./util");
 
 async function getById(id) {
-    const car = await Car.findById(id).populate('accessories');
+  const car = await Car.findById(id).populate("accessories");
 
   if (car) {
     return carViewModel(car);
@@ -16,20 +16,32 @@ async function createCar(car) {
   await result.save();
 }
 
-async function editById(id, car) {
-    const existing = await Car.findById(id);
+async function editById(id, car, ownerId) {
+  const existing = await Car.findById(id);
 
-    existing.name = car.name;
-    existing.description = car.description;
-    existing.imageUrl = car.imageUrl || undefined;
-    existing.price = car.price;
-    existing.accessories = car.accessories;
+  if (existing.owner != ownerId) {
+    return false;
+  }
 
-    await existing.save();
+  existing.name = car.name;
+  existing.description = car.description;
+  existing.imageUrl = car.imageUrl || undefined;
+  existing.price = car.price;
+  existing.accessories = car.accessories;
+
+  await existing.save();
+
+  return true;
 }
 
-async function deleteById(id) {
+async function deleteById(id, ownerId) {
+  const car = await Car.findById(id);
+  if (car.owner != ownerId) {
+    return false;
+  }
   await Car.findByIdAndDelete(id);
+
+  return true;
 }
 
 async function getAll(query) {
@@ -54,12 +66,17 @@ async function getAll(query) {
   return cars.map((car) => carViewModel(car));
 }
 
-async function attachAccessory(carId, accessoryId) {
+async function attachAccessory(carId, accessoryId, ownerId) {
   const existing = await Car.findById(carId);
+
+  if (existing.owner != ownerId) {
+    return false;
+  }
 
   existing.accessories.push(accessoryId);
 
   await existing.save();
+  return true;
 }
 
 module.exports = () => (req, res, next) => {
@@ -70,7 +87,7 @@ module.exports = () => (req, res, next) => {
     editById,
     deleteById,
     getAll,
-    attachAccessory
+    attachAccessory,
   };
   next();
 };
