@@ -17,13 +17,7 @@ const _delete = require("./controllers/delete");
 const edit = require("./controllers/edit");
 const accessory = require("./controllers/accessory");
 const attach = require("./controllers/attach");
-const {
-  registerGet,
-  loginGet,
-  loginPost,
-  registerPost,
-  logout,
-} = require("./controllers/auth");
+const authController = require("./controllers/auth");
 const req = require("express/lib/request");
 const { isLoggedIn } = require("./services/util");
 
@@ -85,11 +79,7 @@ async function start() {
     .get(isLoggedIn(), attach.get)
     .post(isLoggedIn(), attach.post);
 
-  app.route("/register").get(registerGet).post(registerPost);
-
-  app.route("/login").get(loginGet).post(loginPost);
-
-  app.get("/logout", isLoggedIn(), logout);
+  app.use(authController);
 
   app.all("*", notFound);
 

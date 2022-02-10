@@ -1,3 +1,5 @@
+const { mapError } = require("../services/util");
+
 module.exports = {
   /**
    *
@@ -19,9 +21,9 @@ module.exports = {
     try {
       await req.storage.createCar(car);
       res.redirect("/");
-    } catch (error) {
-      res.redirect("/create");
-      console.log(error);
+    } catch (err) {
+        res.locals.errors = mapError(err);
+        res.render("create", { title: "Create car", car });
     }
   },
 };
