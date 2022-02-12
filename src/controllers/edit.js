@@ -4,13 +4,13 @@ module.exports = {
     const car = await req.storage.getById(id);
 
     if (car.owner != req.session.user.id) {
-      return res.redirect("/login");
+      return res.redirect('/login');
     }
 
     if (car) {
-      res.render("edit", { title: `Edit car - ${car.name}`, car });
+      res.render('edit', { title: `Edit car - ${car.name}`, car });
     } else {
-      res.redirect("404");
+      res.redirect('404');
     }
   },
   async post(req, res) {
@@ -24,12 +24,12 @@ module.exports = {
 
     try {
       if (await req.storage.editById(id, car, req.session.user.id)) {
-        res.redirect("/");
+        res.redirect('/');
       } else {
-        res.redirect("/login");
+        res.redirect('/login');
       }
     } catch (err) {
-      res.redirect("/404");
+      res.redirect('/404');
       console.log(err.message);
     }
   },

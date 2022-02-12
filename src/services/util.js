@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 function accessoryViewModel(accessory) {
   return {
@@ -19,7 +19,7 @@ function carViewModel(car) {
     imageUrl: car.imageUrl,
     price: car.price,
     accessories: car.accessories,
-    owner: car.owner
+    owner: car.owner,
   };
 
   if (model.accessories.length > 0 && model.accessories[0].name) {
@@ -42,34 +42,42 @@ function isLoggedIn() {
     if (req.session.user) {
       next();
     } else {
-      res.redirect("/login");
+      res.redirect('/login');
     }
   };
 }
 
 function mapError(error) {
   if (Array.isArray(error)) {
-      return error;
+    return error;
   } else if (error.name == 'MongoServerError') {
-      if (error.code == 11000) {
-          return [{
-              msg: 'Username already exists'
-          }];
-      } else {
-          return [{
-              msg: 'Request error'
-          }];
-      }
+    if (error.code == 11000) {
+      return [
+        {
+          msg: 'Username already exists',
+        },
+      ];
+    } else {
+      return [
+        {
+          msg: 'Request error',
+        },
+      ];
+    }
   } else if (error.name == 'ValidationError') {
-      return Object.values(error.errors).map(e => ({ msg: e.message }));
+    return Object.values(error.errors).map((e) => ({ msg: e.message }));
   } else if (typeof error.message == 'string') {
-      return [{
-          msg: error.message
-      }];
+    return [
+      {
+        msg: error.message,
+      },
+    ];
   } else {
-      return [{
-          msg: 'Request error'
-      }];
+    return [
+      {
+        msg: 'Request error',
+      },
+    ];
   }
 }
 
@@ -79,5 +87,5 @@ module.exports = {
   hashedPassword,
   comparePassword,
   isLoggedIn,
-  mapError
+  mapError,
 };

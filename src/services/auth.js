@@ -1,4 +1,4 @@
-const User = require("../models/user");
+const User = require('../models/user');
 
 async function register(session, username, password) {
   const user = new User({
@@ -7,7 +7,7 @@ async function register(session, username, password) {
   });
   session.user = {
     id: user._id,
-    username: user.username
+    username: user.username,
   };
   await user.save();
 }
@@ -18,7 +18,7 @@ async function login(session, username, password) {
   if (user && (await user.comparePassword(password))) {
     session.user = {
       id: user._id,
-      username: user.username
+      username: user.username,
     };
     return true;
   } else {
@@ -31,7 +31,6 @@ function logout(session) {
 }
 
 module.exports = () => (req, res, next) => {
-
   if (req.session.user) {
     res.locals.user = req.session.user;
     res.locals.hasUser = true;
@@ -40,7 +39,7 @@ module.exports = () => (req, res, next) => {
   req.auth = {
     register: (...params) => register(req.session, ...params),
     login: (...params) => login(req.session, ...params),
-    logout: () => logout(req.session)
+    logout: () => logout(req.session),
   };
   next();
 };

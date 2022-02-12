@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 require('./car');
 require('./accessory');
 
-const connectionString = "mongodb://localhost:27017/carbicle";
+const connectionString = 'mongodb://localhost:27017/carbicle';
 
 async function init() {
   try {
@@ -13,7 +13,7 @@ async function init() {
       autoIndex: false,
     });
 
-    mongoose.connection.on("error", (err) => {
+    mongoose.connection.on('error', (err) => {
       console.log(err);
     });
   } catch (err) {

@@ -1,8 +1,8 @@
-const Car = require("../models/car");
-const { carViewModel } = require("./util");
+const Car = require('../models/car');
+const { carViewModel } = require('./util');
 
 async function getById(id) {
-  const car = await Car.findById(id).populate("accessories");
+  const car = await Car.findById(id).populate('accessories');
 
   if (car) {
     return carViewModel(car);
@@ -48,7 +48,7 @@ async function getAll(query) {
   const options = {};
 
   if (query.search) {
-    options.name = new RegExp(query.search, "i");
+    options.name = new RegExp(query.search, 'i');
   }
 
   if (query.from) {
